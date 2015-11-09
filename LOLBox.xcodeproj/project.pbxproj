@@ -103,6 +103,10 @@
 		ADE127BD1BF0987C00FA2ACC = {
 			isa = PBXGroup;
 			children = (
+				ADE127FC1BF09E5600FA2ACC /* Model */,
+				ADE127FD1BF09E5600FA2ACC /* Resources */,
+				ADE127FE1BF09E5600FA2ACC /* View */,
+				ADE127FF1BF09E5600FA2ACC /* ViewControllers */,
 				ADE127C81BF0987C00FA2ACC /* LOLBox */,
 				ADE127E21BF0987C00FA2ACC /* LOLBoxTests */,
 				ADE127ED1BF0987C00FA2ACC /* LOLBoxUITests */,
@@ -162,6 +166,34 @@
 				ADE127F01BF0987C00FA2ACC /* Info.plist */,
 			);
 			path = LOLBoxUITests;
+			sourceTree = "<group>";
+		};
+		ADE127FC1BF09E5600FA2ACC /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		ADE127FD1BF09E5600FA2ACC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		ADE127FE1BF09E5600FA2ACC /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		ADE127FF1BF09E5600FA2ACC /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
