@@ -10,4 +10,5 @@
 
 @interface HeroDetailViewController : RootViewController
 @property (copy, nonatomic) NSString * heroId;
+@property (copy, nonatomic) NSString * heroName;
 @end

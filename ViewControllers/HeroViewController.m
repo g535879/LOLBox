@@ -156,6 +156,7 @@
     HeroModel * model = [[self.dataArray[indexPath.section] allObjects] firstObject][indexPath.row];
     HeroDetailViewController * hvc = [[HeroDetailViewController alloc] init];
     hvc.heroId = model.heroId;
+    hvc.heroName = model.title;
     self.navigationController.tabBarController.tabBar.hidden = YES;
     [self.navigationController pushViewController:hvc animated:YES];
 }

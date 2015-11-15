@@ -846,6 +846,7 @@
 		ADC3985B1BF7411B00E9354C /* HeroTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADC398591BF7411B00E9354C /* HeroTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		ADC3985E1BF7418600E9354C /* HeroModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC3985D1BF7418600E9354C /* HeroModel.m */; settings = {ASSET_TAGS = (); }; };
 		ADC398611BF76D9B00E9354C /* HeroDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC398601BF76D9B00E9354C /* HeroDetailViewController.m */; settings = {ASSET_TAGS = (); }; };
+		ADDA5F181BF8680300A545EB /* bindLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = ADDA5F171BF8680300A545EB /* bindLogo.png */; settings = {ASSET_TAGS = (); }; };
 		ADE127CB1BF0987C00FA2ACC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE127CA1BF0987C00FA2ACC /* main.m */; };
 		ADE127CE1BF0987C00FA2ACC /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE127CD1BF0987C00FA2ACC /* AppDelegate.m */; };
 		ADE127D11BF0987C00FA2ACC /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADE127D01BF0987C00FA2ACC /* RootViewController.m */; };
@@ -1783,6 +1784,7 @@
 		ADC3985D1BF7418600E9354C /* HeroModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroModel.m; sourceTree = "<group>"; };
 		ADC3985F1BF76D9B00E9354C /* HeroDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroDetailViewController.h; sourceTree = "<group>"; };
 		ADC398601BF76D9B00E9354C /* HeroDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroDetailViewController.m; sourceTree = "<group>"; };
+		ADDA5F171BF8680300A545EB /* bindLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bindLogo.png; sourceTree = "<group>"; };
 		ADE127C61BF0987C00FA2ACC /* LOLBox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LOLBox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADE127CA1BF0987C00FA2ACC /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ADE127CC1BF0987C00FA2ACC /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1862,6 +1864,7 @@
 			children = (
 				ADC397BD1BF6E0F900E9354C /* 1111Icon.png */,
 				AD3605121BF0BD520010FBC8 /* garen.mp3 */,
+				ADDA5F171BF8680300A545EB /* bindLogo.png */,
 				AD3606241BF0BD530010FBC8 /* 原生png */,
 			);
 			path = Resource;
@@ -2650,6 +2653,8 @@
 		AD360DDD1BF0D2DD0010FBC8 /* Root */ = {
 			isa = PBXGroup;
 			children = (
+				ADE130D11BF0A59F00FA2ACC /* HeroViewController.h */,
+				ADE130D21BF0A59F00FA2ACC /* HeroViewController.m */,
 				ADE128001BF0A34900FA2ACC /* MyTabBarController.h */,
 				ADE128011BF0A34900FA2ACC /* MyTabBarController.m */,
 				ADE130DA1BF0ACFC00FA2ACC /* MynavigationController.h */,
@@ -2692,8 +2697,6 @@
 		AD360DDF1BF0D3010010FBC8 /* Hero */ = {
 			isa = PBXGroup;
 			children = (
-				ADE130D11BF0A59F00FA2ACC /* HeroViewController.h */,
-				ADE130D21BF0A59F00FA2ACC /* HeroViewController.m */,
 				ADC3985F1BF76D9B00E9354C /* HeroDetailViewController.h */,
 				ADC398601BF76D9B00E9354C /* HeroDetailViewController.m */,
 			);
@@ -3171,6 +3174,7 @@
 				AD360C4B1BF0BD5C0010FBC8 /* news_list_item_defualt@2x.png in Resources */,
 				AD360C9C1BF0BD5C0010FBC8 /* player_items_bkg@2x.png in Resources */,
 				AD360C611BF0BD5C0010FBC8 /* person_lost_4@3x.png in Resources */,
+				ADDA5F181BF8680300A545EB /* bindLogo.png in Resources */,
 				AD360C521BF0BD5C0010FBC8 /* notice_pic_cancel_normal@2x.png in Resources */,
 				ADC397BE1BF6E0F900E9354C /* 1111Icon.png in Resources */,
 				ADA933151BF5FD1C00F4A8A5 /* LICENSE in Resources */,

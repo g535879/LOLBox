@@ -8,8 +8,16 @@
 
 #import "HeroDetailViewController.h"
 
-@interface HeroDetailViewController ()
+#define MAX_WIDTH [UIScreen mainScreen].bounds.size.width
+#define MAX_HEIGHT [UIScreen mainScreen].bounds.size.height
 
+@interface HeroDetailViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate> {
+    UIScrollView * _scrollview; //滚动视图
+    UIImageView * _heroBigImageView; //英雄图片
+    UITableView * _heroTableView;
+    UIView * _headView;
+    
+}
 @end
 
 @implementation HeroDetailViewController
@@ -18,22 +26,80 @@
     [super viewDidLoad];
     [self setNavigationRefer]; //设置导航栏
     [self loadData]; //加载数据
+    [self createLayout]; //布局
+
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
   [self.navigationController.navigationBar setBackgroundImage:[self createImageWithColor:[UIColor colorWithRed:35 / 255.0 green:43 / 255.0 blue:60 / 255.0 alpha:1]] forBarMetrics:UIBarMetricsDefault];
-    
     self.navigationController.tabBarController.tabBar.hidden = NO;
 }
 
 
 //导航栏设置
 - (void)setNavigationRefer {
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     [self.navigationController.navigationBar setBackgroundImage:[self createImageWithColor:[UIColor clearColor]] forBarMetrics:UIBarMetricsDefault];
     [self.view setBackgroundColor:[UIColor orangeColor]];
+    self.title = self.heroName;
     
+}
+
+#pragma mark - createLayout 
+- (void)createLayout {
+    
+    
+    //scrollView
+    _scrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, 2 * MAX_HEIGHT / 3)];
+    _scrollview.delegate = self;
+    _scrollview.showsHorizontalScrollIndicator = NO;
+    _scrollview.contentOffset = CGPointMake(0, 0);
+    _scrollview.pagingEnabled = YES;
+    _scrollview.contentSize = CGSizeMake(MAX_WIDTH * 4, 2 * MAX_HEIGHT / 3);
+//    [self.view addSubview:_scrollview];
+    
+    //teset
+    for ( int i = 0; i < 4; i++) {
+        UIView * v = [[UIView alloc] initWithFrame:CGRectMake(MAX_WIDTH * i, 0, MAX_WIDTH, 2 * MAX_HEIGHT / 3)];
+        [v setBackgroundColor:[UIColor colorWithRed:(arc4random() % 256) / 255.0 green:arc4random() % 256 / 255.0 blue:arc4random() % 256 / 255.0 alpha:1]];
+        [_scrollview addSubview:v];
+    }
+    
+    //headImageView
+    _heroBigImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -MAX_HEIGHT / 3, MAX_WIDTH, MAX_HEIGHT / 3)];
+    _heroBigImageView.image = [UIImage imageNamed:@"bindLogo"];
+    
+    
+    _heroTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, MAX_WIDTH, MAX_HEIGHT+64) style:UITableViewStylePlain];
+    _heroTableView.delegate = self;
+    _heroTableView.dataSource = self;
+    [_heroTableView addSubview:_heroBigImageView];
+    _heroTableView.contentInset = UIEdgeInsetsMake(MAX_HEIGHT / 3, 0, 0, 0);
+    [_heroTableView setBackgroundColor:[UIColor redColor]];
+    [self.view addSubview:_heroTableView];
+    
+    
+    _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, 50)];
+    NSArray * titleArray = @[@"技能",@"出装加点",@"故事",@"攻略"];
+    [titleArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        btn.frame = CGRectMake(MAX_WIDTH / 4 * idx, 0, MAX_WIDTH / 4, 50);
+        [btn setTitle:titleArray[idx] forState:UIControlStateNormal];
+        btn.tag = 100 + idx;
+        [btn.titleLabel setFont:[UIFont systemFontOfSize:14]];
+        [btn addTarget:self action:@selector(titleBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [btn setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
+        [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        if (!idx) {//第一个默认选中
+            [btn setSelected:YES];
+            [btn.titleLabel setFont:[UIFont systemFontOfSize:18]];
+        }
+        [_headView addSubview:btn];
+    }];
+    [_headView setBackgroundColor:[UIColor lightGrayColor]];
+    _heroTableView.tableHeaderView  = _headView;
 }
 
 - (void)loadData {
@@ -44,7 +110,12 @@
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     [manager GET:[NSString stringWithFormat:kHeroDetailInfoUrlString,self.heroId] parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         id jsonObj = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        NSLog(@"%@",jsonObj);
+        id error_code = jsonObj[@"error_code"];
+        if (![error_code integerValue]) {
+            NSDictionary * resultDic = jsonObj[@"result"];
+            NSString * heroImageStrUrl = resultDic[@"img_top"];
+            [_heroBigImageView setImageWithURL:[NSURL URLWithString:heroImageStrUrl] placeholderImage:[UIImage imageNamed:@"bindLogo"]];
+        }
         [MMProgressHUD dismissWithSuccess:@"加载完成"];
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         NSLog(@"%@",error);
@@ -67,6 +138,114 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+#pragma mark - tableView
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    static NSString * cellIdentifier = @"cellIdentifier";
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    [cell.contentView addSubview:_scrollview];
+    return cell;
+}
+
+
+//单元格高度
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 2 * MAX_HEIGHT / 3;
+}
+
+
+#pragma mark -  srcollview delegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+
+    CGFloat  y = scrollView.contentOffset.y;
+    if (y < - MAX_HEIGHT / 3 && scrollView == _heroTableView) {
+        CGRect frame = _heroBigImageView.frame;
+        frame.size.height =  - y ;
+        frame.origin.y = y;
+//        _heroBigImageView.center = CGPointMake(MAX_WIDTH / 2, y/2);
+        _heroBigImageView.frame = frame;
+    }
+    if (scrollView == _scrollview) { //滚动视图
+        CGFloat  x = scrollView.contentOffset.x;
+        [_headView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[UIButton class]]) {
+                UIButton * b = (UIButton *)obj;
+                CGFloat offSet = x / MAX_WIDTH * 1.0;
+//                NSLog(@"%f",fabs(b.tag - 100 - offSet));
+                if (fabs(b.tag - 100 - offSet) < 1) {
+                    b.selected  = YES;
+                    [b.titleLabel setFont:[UIFont systemFontOfSize:16]];
+                    
+                    if (b.tag - 100 == offSet) {
+                        [b.titleLabel setFont:[UIFont systemFontOfSize:18]];
+                    }
+                }
+                else{
+                    b.selected = NO;
+                    [b.titleLabel setFont:[UIFont systemFontOfSize:14]];
+                }
+            }
+        }];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    if (scrollView != _scrollview) {
+        return;
+    }
+    //取消其他按钮选中状态
+    [_headView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[UIButton class]]) {
+            UIButton * b = (UIButton *)obj;
+            if (b.selected) {
+                b.selected = NO;
+                [b.titleLabel setFont:[UIFont systemFontOfSize:14]];
+            }
+            if (idx == scrollView.contentOffset.x / MAX_WIDTH) {
+                b.selected = YES;
+                [b.titleLabel setFont:[UIFont systemFontOfSize:18]];
+            }
+        }
+    }];
+    
+}
+#pragma mark - titleBtnClick 
+- (void)titleBtnClick:(UIButton *)btn {
+    //取消其他按钮选中状态
+    [_headView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([obj isKindOfClass:[UIButton class]]) {
+            UIButton * b = (UIButton *)obj;
+            if (b.selected) {
+                b.selected = NO;
+                [b.titleLabel setFont:[UIFont systemFontOfSize:14]];
+            }
+        }
+    }];
+    btn.selected = !btn.selected;
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        //设置滚动视图偏移量
+        _scrollview.contentOffset = CGPointMake(MAX_WIDTH * (btn.tag - 100), 0);
+        //字体变大
+        [btn.titleLabel setFont:[UIFont systemFontOfSize:18]];
+    }];
+    
+    
+}
 /*
 #pragma mark - Navigation
 
