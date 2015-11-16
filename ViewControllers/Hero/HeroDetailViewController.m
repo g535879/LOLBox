@@ -16,6 +16,7 @@
     UIImageView * _heroBigImageView; //英雄图片
     UITableView * _heroTableView;
     UIView * _headView;
+    UITableView * _skillTableView; //技能相关表格布局
     
 }
 @end
@@ -52,7 +53,7 @@
     
     
     //scrollView
-    _scrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, 2 * MAX_HEIGHT / 3)];
+    _scrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT - 64 - 50)];
     _scrollview.delegate = self;
     _scrollview.showsHorizontalScrollIndicator = NO;
     _scrollview.contentOffset = CGPointMake(0, 0);
@@ -62,9 +63,25 @@
     
     //teset
     for ( int i = 0; i < 4; i++) {
-        UIView * v = [[UIView alloc] initWithFrame:CGRectMake(MAX_WIDTH * i, 0, MAX_WIDTH, 2 * MAX_HEIGHT / 3)];
+        UIView * v = [[UIView alloc] initWithFrame:CGRectMake(MAX_WIDTH * i, 0, MAX_WIDTH, MAX_HEIGHT - 64 - 50)];
         [v setBackgroundColor:[UIColor colorWithRed:(arc4random() % 256) / 255.0 green:arc4random() % 256 / 255.0 blue:arc4random() % 256 / 255.0 alpha:1]];
         [_scrollview addSubview:v];
+        if (!i) {
+//            [v addSubview:_skillTableView];
+//            UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//            btn.frame = CGRectMake(0, 0, 150, 150);
+//            [btn setTitle:@"hello" forState:UIControlStateNormal];
+            
+            //skillView
+            _skillTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT - 64 - 50) style:UITableViewStylePlain];
+            _skillTableView.delegate = self;
+            _skillTableView.dataSource = self;
+//            _skillTableView.bounces = NO;
+            _skillTableView.scrollEnabled = NO;
+            [_skillTableView setBackgroundColor:[UIColor yellowColor]];
+            
+            [v addSubview:_skillTableView];
+        }
     }
     
     //headImageView
@@ -75,6 +92,7 @@
     _heroTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, MAX_WIDTH, MAX_HEIGHT+64) style:UITableViewStylePlain];
     _heroTableView.delegate = self;
     _heroTableView.dataSource = self;
+    _heroTableView.showsVerticalScrollIndicator = NO;
     [_heroTableView addSubview:_heroBigImageView];
     _heroTableView.contentInset = UIEdgeInsetsMake(MAX_HEIGHT / 3, 0, 0, 0);
     [_heroTableView setBackgroundColor:[UIColor redColor]];
@@ -90,16 +108,18 @@
         btn.tag = 100 + idx;
         [btn.titleLabel setFont:[UIFont systemFontOfSize:14]];
         [btn addTarget:self action:@selector(titleBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [btn setTitleColor:[UIColor blueColor] forState:UIControlStateSelected];
         [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [btn setTitleColor:[UIColor colorWithRed:36 / 255.0 green:119/ 255.0 blue:255/ 255.0 alpha:1] forState:UIControlStateSelected];
         if (!idx) {//第一个默认选中
             [btn setSelected:YES];
             [btn.titleLabel setFont:[UIFont systemFontOfSize:18]];
         }
         [_headView addSubview:btn];
     }];
+    
     [_headView setBackgroundColor:[UIColor lightGrayColor]];
     _heroTableView.tableHeaderView  = _headView;
+
 }
 
 - (void)loadData {
@@ -147,23 +167,41 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    if (tableView == _heroTableView) {
+        return 1;
+    }
+    return 40;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (tableView == _heroTableView) {
+        static NSString * cellIdentifier = @"cellIdentifier";
+        UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        }
+        [cell.contentView addSubview:_scrollview];
+        return cell;
+    }
+    
     static NSString * cellIdentifier = @"cellIdentifier";
     UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    [cell.contentView addSubview:_scrollview];
+    cell.textLabel.text = [NSString stringWithFormat:@"测试数据%ld",indexPath.row];
+//    [cell.contentView addSubview:_skillTableView];
     return cell;
+    
 }
 
 
 //单元格高度
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 2 * MAX_HEIGHT / 3;
+    if (tableView == _heroTableView) {
+        return MAX_HEIGHT - 64 - 50 + 200;
+    }
+    return 40;
 }
 
 
@@ -171,14 +209,58 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
     CGFloat  y = scrollView.contentOffset.y;
-    if (y < - MAX_HEIGHT / 3 && scrollView == _heroTableView) {
-        CGRect frame = _heroBigImageView.frame;
-        frame.size.height =  - y ;
-        frame.origin.y = y;
-//        _heroBigImageView.center = CGPointMake(MAX_WIDTH / 2, y/2);
-        _heroBigImageView.frame = frame;
+   
+    
+    //父表格移动
+    if (scrollView == _heroTableView) {
+         NSLog(@"%f",y);
+        if (y > -65) { //滑动到顶端。固定位置
+            //固定位置-65
+            scrollView.contentOffset = CGPointMake(0, -65);
+            CGFloat offsetY = _skillTableView.contentOffset.y;
+            //子表格联动
+            //控制偏移量
+            if (_skillTableView.contentOffset.y < (_skillTableView.contentSize.height - 64 -250)) {
+                _skillTableView.contentOffset = CGPointMake(0, offsetY + y + 65);
+            }
+            _skillTableView.scrollEnabled = YES;
+        }
+        //往下滑动。
+        if (y < -65) {
+            
+            //判断子表格偏移量
+            if (_skillTableView.contentOffset.y > 0) {
+                
+                //固定位置-65
+                _heroTableView.contentOffset = CGPointMake(0, -65);
+                
+                CGFloat offsetY = _skillTableView.contentOffset.y;
+                //子表格联动
+                _skillTableView.contentOffset = CGPointMake(0, offsetY + y + 65);
+
+            }
+        }
+        //顶部图片偏移量
+        if (y < - MAX_HEIGHT / 3) {
+            CGRect frame = _heroBigImageView.frame;
+            frame.size.height =  - y ;
+            frame.origin.y = y;
+            _heroBigImageView.frame = frame;
+        }
     }
-    if (scrollView == _scrollview) { //滚动视图
+    
+    //技能栏相关，子表格
+    else if (scrollView == _skillTableView) {
+        
+        //内部表格偏移量小于0.固定位置
+         if (_skillTableView.contentOffset.y <= 0) {
+            _skillTableView.contentOffset = CGPointMake(0, 0);
+            _skillTableView.scrollEnabled = NO;
+        }
+
+    }
+    //标题栏滚动视图联动
+   else if (scrollView == _scrollview) { //滚动视图
         CGFloat  x = scrollView.contentOffset.x;
         [_headView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[UIButton class]]) {
