@@ -14,9 +14,10 @@
 @interface HeroDetailViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate> {
     UIScrollView * _scrollview; //滚动视图
     UIImageView * _heroBigImageView; //英雄图片
-    UITableView * _heroTableView;
-    UIView * _headView;
-    UITableView * _skillTableView; //技能相关表格布局
+    UITableView * _heroTableView;   //父表格视图
+    UIView * _headView;  //4个按钮容器
+    UITableView * _currentTableView; //当前活动的子视图
+
     
 }
 @end
@@ -59,31 +60,29 @@
     _scrollview.contentOffset = CGPointMake(0, 0);
     _scrollview.pagingEnabled = YES;
     _scrollview.contentSize = CGSizeMake(MAX_WIDTH * 4, 2 * MAX_HEIGHT / 3);
-//    [self.view addSubview:_scrollview];
     
-    //teset
+    //4个子tableview
     for ( int i = 0; i < 4; i++) {
+        //作为子tableview 的容器
         UIView * v = [[UIView alloc] initWithFrame:CGRectMake(MAX_WIDTH * i, 0, MAX_WIDTH, MAX_HEIGHT - 64 - 50)];
         [v setBackgroundColor:[UIColor colorWithRed:(arc4random() % 256) / 255.0 green:arc4random() % 256 / 255.0 blue:arc4random() % 256 / 255.0 alpha:1]];
         [_scrollview addSubview:v];
-        if (!i) {
-//            [v addSubview:_skillTableView];
-//            UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//            btn.frame = CGRectMake(0, 0, 150, 150);
-//            [btn setTitle:@"hello" forState:UIControlStateNormal];
-            
-            //skillView
-            _skillTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT - 64 - 50) style:UITableViewStylePlain];
-            _skillTableView.delegate = self;
-            _skillTableView.dataSource = self;
-//            _skillTableView.bounces = NO;
-            _skillTableView.scrollEnabled = NO;
-            [_skillTableView setBackgroundColor:[UIColor yellowColor]];
-            
-            [v addSubview:_skillTableView];
+        
+        //子tableview
+        UITableView  *_skillTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT - 64 - 50) style:UITableViewStylePlain];
+        
+        _skillTableView.delegate = self;
+        _skillTableView.dataSource = self;
+        _skillTableView.scrollEnabled = NO;
+        
+        if (!i) { //第0个
+            //当前表格视图
+            _currentTableView = _skillTableView;
         }
+        //默认第一个视图
+        [v addSubview:_skillTableView];
     }
-    
+    //顶部图片
     //headImageView
     _heroBigImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -MAX_HEIGHT / 3, MAX_WIDTH, MAX_HEIGHT / 3)];
     _heroBigImageView.image = [UIImage imageNamed:@"bindLogo"];
@@ -95,10 +94,9 @@
     _heroTableView.showsVerticalScrollIndicator = NO;
     [_heroTableView addSubview:_heroBigImageView];
     _heroTableView.contentInset = UIEdgeInsetsMake(MAX_HEIGHT / 3, 0, 0, 0);
-    [_heroTableView setBackgroundColor:[UIColor redColor]];
     [self.view addSubview:_heroTableView];
     
-    
+    //中间4个按钮
     _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, 50)];
     NSArray * titleArray = @[@"技能",@"出装加点",@"故事",@"攻略"];
     [titleArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -122,6 +120,7 @@
 
 }
 
+//加载数据
 - (void)loadData {
     //加载框
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleExpand];
@@ -143,6 +142,7 @@
     }];
 }
 
+//根据颜色生成图片
 - (UIImage *)createImageWithColor:(UIColor *)color {
     CGRect rect = CGRectMake(0, 0, 1, 1);  //图片尺寸
     UIGraphicsBeginImageContext(rect.size); //填充画笔
@@ -153,6 +153,7 @@
     UIGraphicsEndImageContext(); //消除画笔
     return image;
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -170,10 +171,11 @@
     if (tableView == _heroTableView) {
         return 1;
     }
-    return 40;
+    return 12;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    //父tableview
     if (tableView == _heroTableView) {
         static NSString * cellIdentifier = @"cellIdentifier";
         UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
@@ -190,7 +192,6 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     cell.textLabel.text = [NSString stringWithFormat:@"测试数据%ld",indexPath.row];
-//    [cell.contentView addSubview:_skillTableView];
     return cell;
     
 }
@@ -201,31 +202,33 @@
     if (tableView == _heroTableView) {
         return MAX_HEIGHT - 64 - 50 + 200;
     }
-    return 40;
+    return 240;
 }
 
 
 #pragma mark -  srcollview delegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 
+    //获取当前活动的tableview
+    UITableView * _skillTableView = _currentTableView;
     CGFloat  y = scrollView.contentOffset.y;
    
     
     //父表格移动
     if (scrollView == _heroTableView) {
-         NSLog(@"%f",y);
+        
         if (y > -65) { //滑动到顶端。固定位置
             //固定位置-65
             scrollView.contentOffset = CGPointMake(0, -65);
             CGFloat offsetY = _skillTableView.contentOffset.y;
             //子表格联动
             //控制偏移量
-            if (_skillTableView.contentOffset.y < (_skillTableView.contentSize.height - 64 -250)) {
+            if (_skillTableView.contentOffset.y < (_skillTableView.contentSize.height - 64 -500)) {
                 _skillTableView.contentOffset = CGPointMake(0, offsetY + y + 65);
             }
             _skillTableView.scrollEnabled = YES;
         }
-        //往下滑动。
+        //往下滑动。判断自表格是否移动到0.如到0 移动父表格。否则。移动子表格
         if (y < -65) {
             
             //判断子表格偏移量
@@ -299,6 +302,10 @@
             }
             if (idx == scrollView.contentOffset.x / MAX_WIDTH) {
                 b.selected = YES;
+                
+                //当前表格视图
+                _currentTableView = [[_scrollview.subviews[idx] subviews]firstObject];
+                
                 [b.titleLabel setFont:[UIFont systemFontOfSize:18]];
             }
         }
@@ -326,16 +333,9 @@
         [btn.titleLabel setFont:[UIFont systemFontOfSize:18]];
     }];
     
+    //当前表格视图
+   _currentTableView = [[_scrollview.subviews[btn.tag - 100] subviews]firstObject];
     
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
