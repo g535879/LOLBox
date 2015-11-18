@@ -4,7 +4,7 @@
 //
 //  Created by 古玉彬 on 15/11/18.
 //  Copyright © 2015年 guyubin. All rights reserved.
-//
+// 通用英雄描述
 
 #import <UIKit/UIKit.h>
 

@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		AD0EC3D61BFC694B00508D6D /* HeroInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0EC3D51BFC694B00508D6D /* HeroInfoModel.m */; settings = {ASSET_TAGS = (); }; };
+		AD0EC4051BFC8DB300508D6D /* HeroDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0EC4041BFC8DB300508D6D /* HeroDetailModel.m */; settings = {ASSET_TAGS = (); }; };
+		AD0EC4081BFCA69A00508D6D /* HeroDetailCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0EC4071BFCA69A00508D6D /* HeroDetailCellModel.m */; settings = {ASSET_TAGS = (); }; };
 		AD3609791BF0BD590010FBC8 /* garen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AD3605121BF0BD520010FBC8 /* garen.mp3 */; settings = {ASSET_TAGS = (); }; };
 		AD360A8A1BF0BD590010FBC8 /* 542.png in Resources */ = {isa = PBXBuildFile; fileRef = AD3606251BF0BD530010FBC8 /* 542.png */; settings = {ASSET_TAGS = (); }; };
 		AD360A8B1BF0BD590010FBC8 /* 543.png in Resources */ = {isa = PBXBuildFile; fileRef = AD3606261BF0BD530010FBC8 /* 543.png */; settings = {ASSET_TAGS = (); }; };
@@ -827,6 +829,7 @@
 		AD6B52471BFB2C6200061F6C /* libUMSocial_Sdk_Shake_1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B52291BFB2C6200061F6C /* libUMSocial_Sdk_Shake_1.0.a */; settings = {ASSET_TAGS = (); }; };
 		AD6B52481BFB2C6200061F6C /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B522C1BFB2C6200061F6C /* libSocialWechat.a */; settings = {ASSET_TAGS = (); }; };
 		AD6B52491BFB2C6200061F6C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B522D1BFB2C6200061F6C /* libWeChatSDK.a */; settings = {ASSET_TAGS = (); }; };
+		AD988C871BFCBBBD00B1727F /* HeroPorAViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD988C861BFCBBBD00B1727F /* HeroPorAViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		ADA8E0EF1BFB468300DD5EA5 /* HeroSkillViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA8E0ED1BFB468300DD5EA5 /* HeroSkillViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		ADA8E0F01BFB468300DD5EA5 /* HeroSkillViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA8E0EE1BFB468300DD5EA5 /* HeroSkillViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		ADA932EB1BF5F16900F4A8A5 /* SCNavTabBar.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ADA932E21BF5F16900F4A8A5 /* SCNavTabBar.bundle */; settings = {ASSET_TAGS = (); }; };
@@ -925,6 +928,10 @@
 		94EDA41A1B4ABA1D641D91E5 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		AD0EC3D41BFC694B00508D6D /* HeroInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroInfoModel.h; sourceTree = "<group>"; };
 		AD0EC3D51BFC694B00508D6D /* HeroInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroInfoModel.m; sourceTree = "<group>"; };
+		AD0EC4031BFC8DB300508D6D /* HeroDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroDetailModel.h; sourceTree = "<group>"; };
+		AD0EC4041BFC8DB300508D6D /* HeroDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroDetailModel.m; sourceTree = "<group>"; };
+		AD0EC4061BFCA69A00508D6D /* HeroDetailCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroDetailCellModel.h; sourceTree = "<group>"; };
+		AD0EC4071BFCA69A00508D6D /* HeroDetailCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroDetailCellModel.m; sourceTree = "<group>"; };
 		AD3605121BF0BD520010FBC8 /* garen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = garen.mp3; sourceTree = "<group>"; };
 		AD3606251BF0BD530010FBC8 /* 542.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 542.png; sourceTree = "<group>"; };
 		AD3606261BF0BD530010FBC8 /* 543.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 543.png; sourceTree = "<group>"; };
@@ -1785,6 +1792,8 @@
 		AD6B522E1BFB2C6200061F6C /* UMSocialWechatHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialWechatHandler.h; sourceTree = "<group>"; };
 		AD6B522F1BFB2C6200061F6C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		AD6B52301BFB2C6200061F6C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		AD988C851BFCBBBD00B1727F /* HeroPorAViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroPorAViewCell.h; sourceTree = "<group>"; };
+		AD988C861BFCBBBD00B1727F /* HeroPorAViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroPorAViewCell.m; sourceTree = "<group>"; };
 		ADA8E0EC1BFB468300DD5EA5 /* HeroSkillViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroSkillViewCell.h; sourceTree = "<group>"; };
 		ADA8E0ED1BFB468300DD5EA5 /* HeroSkillViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroSkillViewCell.m; sourceTree = "<group>"; };
 		ADA8E0EE1BFB468300DD5EA5 /* HeroSkillViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeroSkillViewCell.xib; sourceTree = "<group>"; };
@@ -2880,6 +2889,8 @@
 				AD3950B21BFC5642003576FD /* HeroInfoCell.h */,
 				AD3950B31BFC5642003576FD /* HeroInfoCell.m */,
 				AD3950B41BFC5642003576FD /* HeroInfoCell.xib */,
+				AD988C851BFCBBBD00B1727F /* HeroPorAViewCell.h */,
+				AD988C861BFCBBBD00B1727F /* HeroPorAViewCell.m */,
 				ADA8E0EC1BFB468300DD5EA5 /* HeroSkillViewCell.h */,
 				ADA8E0ED1BFB468300DD5EA5 /* HeroSkillViewCell.m */,
 				ADA8E0EE1BFB468300DD5EA5 /* HeroSkillViewCell.xib */,
@@ -2924,6 +2935,10 @@
 				AD6B516C1BFAF53400061F6C /* SkillModel.m */,
 				ADC3985C1BF7418600E9354C /* HeroModel.h */,
 				ADC3985D1BF7418600E9354C /* HeroModel.m */,
+				AD0EC4031BFC8DB300508D6D /* HeroDetailModel.h */,
+				AD0EC4041BFC8DB300508D6D /* HeroDetailModel.m */,
+				AD0EC4061BFCA69A00508D6D /* HeroDetailCellModel.h */,
+				AD0EC4071BFCA69A00508D6D /* HeroDetailCellModel.m */,
 			);
 			path = Hero;
 			sourceTree = "<group>";
@@ -4403,6 +4418,7 @@
 				ADA933161BF5FD1C00F4A8A5 /* README.md in Sources */,
 				ADE130D01BF0A59200FA2ACC /* NewsViewController.m in Sources */,
 				ADE130D61BF0A5C800FA2ACC /* HeroDataViewController.m in Sources */,
+				AD988C871BFCBBBD00B1727F /* HeroPorAViewCell.m in Sources */,
 				ADA933201BF5FD1C00F4A8A5 /* MMVectorImage.m in Sources */,
 				ADA933271BF6154000F4A8A5 /* NSString+URLEncoding.m in Sources */,
 				AD360DF91BF0DA790010FBC8 /* GirlViewController.m in Sources */,
@@ -4417,9 +4433,11 @@
 				ADA9331A1BF5FD1C00F4A8A5 /* MMProgressHUD+Class.m in Sources */,
 				ADC3982E1BF7175A00E9354C /* MJRefreshComponent.m in Sources */,
 				ADC398361BF7175A00E9354C /* MJRefreshBackStateFooter.m in Sources */,
+				AD0EC4081BFCA69A00508D6D /* HeroDetailCellModel.m in Sources */,
 				ADC3982F1BF7175A00E9354C /* MJRefreshFooter.m in Sources */,
 				AD3950B51BFC5642003576FD /* HeroInfoCell.m in Sources */,
 				ADA932EE1BF5F16900F4A8A5 /* SCPopView.m in Sources */,
+				AD0EC4051BFC8DB300508D6D /* HeroDetailModel.m in Sources */,
 				ADE127CE1BF0987C00FA2ACC /* AppDelegate.m in Sources */,
 				ADA932F61BF5FB5D00F4A8A5 /* DesignDisplayView.m in Sources */,
 				ADC398381BF7175A00E9354C /* MJRefreshNormalHeader.m in Sources */,

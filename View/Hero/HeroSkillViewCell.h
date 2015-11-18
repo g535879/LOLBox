@@ -4,7 +4,7 @@
 //
 //  Created by 古玉彬 on 15/11/17.
 //  Copyright © 2015年 guyubin. All rights reserved.
-//
+//英雄技能cell
 
 
 #import <UIKit/UIKit.h>

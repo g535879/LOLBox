@@ -11,11 +11,14 @@
 #import "HeroSkillViewCell.h"
 #import "HeroInfoCell.h"
 #import "HeroInfoModel.h"
+#import "HeroDetailModel.h"
+#import "HeroDetailCellModel.h"
+#import "HeroPorAViewCell.h"
 
 #define MAX_WIDTH [UIScreen mainScreen].bounds.size.width
 #define MAX_HEIGHT [UIScreen mainScreen].bounds.size.height
 
-@interface HeroDetailViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,ReloadCell> {
+@interface HeroDetailViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,ReloadCell,PushHeroPage> {
     UIScrollView * _scrollview; //滚动视图
     UIImageView * _heroBigImageView; //英雄图片
     UITableView * _heroTableView;   //父表格视图
@@ -30,9 +33,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self setNavigationRefer]; //设置导航栏
     [self loadData]; //加载数据
     [self createLayout]; //布局
+
 
     
 }
@@ -44,11 +47,14 @@
 }
 
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self setNavigationRefer]; //设置导航栏透明
+}
 //导航栏设置
 - (void)setNavigationRefer {
     self.edgesForExtendedLayout = UIRectEdgeNone;
     [self.navigationController.navigationBar setBackgroundImage:[self createImageWithColor:[UIColor clearColor]] forBarMetrics:UIBarMetricsDefault];
-    [self.view setBackgroundColor:[UIColor orangeColor]];
     self.title = self.heroName;
     
 }
@@ -87,6 +93,9 @@
         
         //注册cell
         [_skillTableView registerNib:[UINib nibWithNibName:@"HeroInfoCell" bundle:nil] forCellReuseIdentifier:@"heroInfoReuseCell"];
+        
+        //注册cell
+        [_skillTableView registerClass:[HeroPorAViewCell class] forCellReuseIdentifier:@"heroPaterOrAgainstReuseCell"];
         
         if (!i) { //第0个
             //当前表格视图
@@ -150,32 +159,83 @@
             //顶部图片
             [_heroBigImageView setImageWithURL:[NSURL URLWithString:heroImageStrUrl] placeholderImage:[UIImage imageNamed:@"bindLogo"]];
             
-//=================================================第一页数据开始===============================================/
-            //解析技能
-            NSArray * skillArray = resultDic[@"skill"];
-            //技能相关模型数组
-            NSMutableArray * skillModelArray = [@[] mutableCopy];
-            for (NSDictionary * dic in skillArray) {
-                SkillModel * model = [[SkillModel alloc] init];
-                [model setValuesForKeysWithDictionary:dic];
-                [skillModelArray addObject:model];
-            }
-            
             //多重数组。提高可扩展性
-            NSArray * heroTitleArray = @[@[@"操作技巧"],@[@"符文穿戴"],@[@"背景故事"],@[@"天赋"]];
-            NSArray * dataKeys = @[@[@"analyse"],@[@"rune_desc"],@[@"background"],@[@"talent_desc"]];
+            NSArray * heroTitleArray = @[@[@"技能介绍",@"操作技巧"],@[@"符文穿戴"],@[@"最佳拍档",@"最强对手",@"背景故事"],@[@"天赋"]];
+            NSArray * dataKeys = @[@[@"skill",@"analyse"],@[@"rune_desc"],@[@"hero_team",@"hero_team",@"background"],@[@"talent_desc"]];
             for (int i = 0; i < heroTitleArray.count; i++) {
+                
                 //当前页容器
                 NSMutableArray * currentDataArray = [@[] mutableCopy];
-                if (i == 0) {
-                    //技能数据加入到第一组中
-                    [currentDataArray addObject:skillModelArray];
-                }
                 [heroTitleArray[i] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    HeroInfoModel * infoModel = [[HeroInfoModel alloc] init];
-                    infoModel.title = obj;
-                    infoModel.desc = resultDic[dataKeys[i][idx]];
-                    [currentDataArray addObject:infoModel];
+                    //当前key
+                    NSString * currentKey = dataKeys[i][idx];
+                    id objs = resultDic[currentKey];
+                    if ([objs isKindOfClass:[NSString class]]) { //字符串，说明为最终数据
+                        HeroInfoModel * infoModel = [[HeroInfoModel alloc] init];
+                        infoModel.title = obj;
+                        infoModel.desc = objs;
+                        [currentDataArray addObject:infoModel];
+                    }
+                    
+                    else if ([objs isKindOfClass:[NSArray class]]){ //数组。说明还需要继续解析
+                        //相关模型数组
+                        NSMutableArray * referArray = [@[] mutableCopy];
+                        
+                        if ([currentKey isEqualToString:@"skill"]) { //技能相关数组
+                            //解析技能
+                            NSArray * skillArray = objs;
+                            for (NSDictionary * dic in skillArray) {
+                                SkillModel * model = [[SkillModel alloc] init];
+                                [model setValuesForKeysWithDictionary:dic];
+                                [referArray addObject:model];
+                            }
+
+                        }
+                        else if ([currentKey isEqualToString:@"hero_team"]){ //英雄搭档/对手数组
+                            NSArray * keysArray = @[@"parter",@"against"];
+                            objs = resultDic[@"hero_team"][keysArray[idx]];
+                            
+                            for (NSDictionary * dic in objs) {
+                                HeroDetailModel * model = [[HeroDetailModel alloc] init];
+                                [model setValuesForKeysWithDictionary:dic];
+                                [referArray addObject:model];
+                            }
+                        }
+                        
+                        //保存到数据源中
+                        [currentDataArray addObject:referArray];
+                    }
+                    
+                    else if ([objs isKindOfClass:[NSDictionary class]]) { //数据字典
+                        
+                        
+                       
+                        
+                        if ([currentKey isEqualToString:@"hero_team"]){ //英雄搭档/对手数组
+                            
+                            //数据模型
+                            HeroDetailCellModel * cellModel;
+                            
+                            //相关模型数组
+                            NSMutableArray * referArray = [@[] mutableCopy];
+                            
+                            NSArray * keysArray = @[@"parter",@"against"];
+                            objs = resultDic[@"hero_team"][keysArray[idx]];
+                            
+                            for (NSDictionary * dic in objs) {
+                                HeroDetailModel * model = [[HeroDetailModel alloc] init];
+                                [model setValuesForKeysWithDictionary:dic];
+                                [referArray addObject:model];
+                            }
+                            
+                            //数据模型赋值
+                            cellModel = [[HeroDetailCellModel alloc] initWithArray:referArray];
+                            cellModel.title = heroTitleArray[i][idx];
+                            
+                            //保存到数据源中
+                            [currentDataArray addObject:cellModel];
+                        }
+                    }
                 }];
                 
                 if (!_dataArray) {
@@ -185,30 +245,7 @@
                 
                 [_dataArray addObject:currentDataArray];//存入数据源
             }
-            //操作技巧解析
-           
             
-//=================================================第一页数据结束===============================================/
-            
-//=================================================第二页数据开始===============================================/
-//            //第二页数据容器
-//            NSMutableArray * equipArray = [@[] mutableCopy];
-//            
-//            //符文穿戴
-//            HeroInfoModel * traceModel = [[HeroInfoModel alloc] init];
-//            traceModel.title = ;
-//            traceModel.desc = resultDic[];
-//            [equipArray addObject:traceModel];
-//            [_dataArray addObject:equipArray];
-//=================================================第二页数据结束===============================================/
-//=================================================第三页数据开始===============================================/
-            //第三页数据容器
-            NSMutableArray * storyArray = [@[] mutableCopy];
-            //背景故事
-            
-//=================================================第三页数据结束===============================================/
-//=================================================第四页数据开始===============================================/
-//=================================================第四页数据结束===============================================/
             //默认显示第一页数据
             _currentDataArray = _dataArray[0];
             //刷新数据
@@ -292,6 +329,15 @@
             cell.desc.text = model.desc;
             return cell;
         }
+        //英雄敌对或搭档cell
+        else if([obj isKindOfClass:[HeroDetailCellModel class]]) {
+            HeroDetailCellModel * model = (HeroDetailCellModel *)obj;
+            static NSString * cellIdentifier = @"heroPaterOrAgainstReuseCell";
+            HeroPorAViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell.delegate = self;
+            [cell setModel:model];
+            return cell;
+        }
     }
 
     return nil;
@@ -324,6 +370,16 @@
         infoCell.desc.text = model.desc;
         
         cell = infoCell;
+    }
+    
+    
+    //英雄搭档/敌对
+    else if ([obj isKindOfClass:[HeroDetailCellModel class]]) {
+        HeroDetailCellModel * model = (HeroDetailCellModel *)obj;
+        static NSString * cellIdentifier = @"heroPaterOrAgainstReuseCell";
+        HeroPorAViewCell * heroCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        [heroCell setModel:model];
+        cell = heroCell;
     }
 
     return [(id)cell heightOfCellWithWidth:MAX_WIDTH];
@@ -495,5 +551,15 @@
     }
     //刷新数据
     [_currentTableView reloadRowsAtIndexPaths:@[[_currentTableView indexPathForCell:cell]] withRowAnimation:NO];
+}
+#pragma mark - push delegate
+
+//cell单元格内图片点击事件跳转
+- (void)pushHeroPageByHeroId:(NSString *)hId andTitle:(NSString *)title {
+    HeroDetailViewController * hvc = [[HeroDetailViewController alloc] init];
+    hvc.heroId = hId;
+    hvc.heroName = title;
+    
+    [self.navigationController pushViewController:hvc animated:YES];
 }
 @end
