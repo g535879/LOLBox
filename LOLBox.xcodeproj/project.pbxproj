@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD0EC3D61BFC694B00508D6D /* HeroInfoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AD0EC3D51BFC694B00508D6D /* HeroInfoModel.m */; settings = {ASSET_TAGS = (); }; };
 		AD3609791BF0BD590010FBC8 /* garen.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = AD3605121BF0BD520010FBC8 /* garen.mp3 */; settings = {ASSET_TAGS = (); }; };
 		AD360A8A1BF0BD590010FBC8 /* 542.png in Resources */ = {isa = PBXBuildFile; fileRef = AD3606251BF0BD530010FBC8 /* 542.png */; settings = {ASSET_TAGS = (); }; };
 		AD360A8B1BF0BD590010FBC8 /* 543.png in Resources */ = {isa = PBXBuildFile; fileRef = AD3606261BF0BD530010FBC8 /* 543.png */; settings = {ASSET_TAGS = (); }; };
@@ -790,6 +791,8 @@
 		AD360DF61BF0DA5C0010FBC8 /* OfficaialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD360DF51BF0DA5C0010FBC8 /* OfficaialViewController.m */; settings = {ASSET_TAGS = (); }; };
 		AD360DF91BF0DA790010FBC8 /* GirlViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD360DF81BF0DA790010FBC8 /* GirlViewController.m */; settings = {ASSET_TAGS = (); }; };
 		AD360DFC1BF0DA890010FBC8 /* RadiersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AD360DFB1BF0DA890010FBC8 /* RadiersViewController.m */; settings = {ASSET_TAGS = (); }; };
+		AD3950B51BFC5642003576FD /* HeroInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD3950B31BFC5642003576FD /* HeroInfoCell.m */; settings = {ASSET_TAGS = (); }; };
+		AD3950B61BFC5642003576FD /* HeroInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AD3950B41BFC5642003576FD /* HeroInfoCell.xib */; settings = {ASSET_TAGS = (); }; };
 		AD6B516D1BFAF53400061F6C /* SkillModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AD6B516C1BFAF53400061F6C /* SkillModel.m */; settings = {ASSET_TAGS = (); }; };
 		AD6B51E11BFB242100061F6C /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B51E01BFB242100061F6C /* SystemConfiguration.framework */; };
 		AD6B51E31BFB242E00061F6C /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B51E21BFB242E00061F6C /* Security.framework */; };
@@ -920,6 +923,8 @@
 /* Begin PBXFileReference section */
 		0E4CACD9E5A3D01747DC4D88 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		94EDA41A1B4ABA1D641D91E5 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		AD0EC3D41BFC694B00508D6D /* HeroInfoModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroInfoModel.h; sourceTree = "<group>"; };
+		AD0EC3D51BFC694B00508D6D /* HeroInfoModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroInfoModel.m; sourceTree = "<group>"; };
 		AD3605121BF0BD520010FBC8 /* garen.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = garen.mp3; sourceTree = "<group>"; };
 		AD3606251BF0BD530010FBC8 /* 542.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 542.png; sourceTree = "<group>"; };
 		AD3606261BF0BD530010FBC8 /* 543.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 543.png; sourceTree = "<group>"; };
@@ -1712,6 +1717,9 @@
 		AD360DF81BF0DA790010FBC8 /* GirlViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GirlViewController.m; sourceTree = "<group>"; };
 		AD360DFA1BF0DA890010FBC8 /* RadiersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RadiersViewController.h; sourceTree = "<group>"; };
 		AD360DFB1BF0DA890010FBC8 /* RadiersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RadiersViewController.m; sourceTree = "<group>"; };
+		AD3950B21BFC5642003576FD /* HeroInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroInfoCell.h; sourceTree = "<group>"; };
+		AD3950B31BFC5642003576FD /* HeroInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroInfoCell.m; sourceTree = "<group>"; };
+		AD3950B41BFC5642003576FD /* HeroInfoCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = HeroInfoCell.xib; sourceTree = "<group>"; };
 		AD6B516B1BFAF53400061F6C /* SkillModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SkillModel.h; path = ../SkillModel.h; sourceTree = "<group>"; };
 		AD6B516C1BFAF53400061F6C /* SkillModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SkillModel.m; path = ../SkillModel.m; sourceTree = "<group>"; };
 		AD6B51831BFB1F2F00061F6C /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -2869,6 +2877,9 @@
 		AD6B516F1BFAF5A000061F6C /* Hero */ = {
 			isa = PBXGroup;
 			children = (
+				AD3950B21BFC5642003576FD /* HeroInfoCell.h */,
+				AD3950B31BFC5642003576FD /* HeroInfoCell.m */,
+				AD3950B41BFC5642003576FD /* HeroInfoCell.xib */,
 				ADA8E0EC1BFB468300DD5EA5 /* HeroSkillViewCell.h */,
 				ADA8E0ED1BFB468300DD5EA5 /* HeroSkillViewCell.m */,
 				ADA8E0EE1BFB468300DD5EA5 /* HeroSkillViewCell.xib */,
@@ -2907,6 +2918,8 @@
 		AD6B51731BFAF5D500061F6C /* Hero */ = {
 			isa = PBXGroup;
 			children = (
+				AD0EC3D41BFC694B00508D6D /* HeroInfoModel.h */,
+				AD0EC3D51BFC694B00508D6D /* HeroInfoModel.m */,
 				AD6B516B1BFAF53400061F6C /* SkillModel.h */,
 				AD6B516C1BFAF53400061F6C /* SkillModel.m */,
 				ADC3985C1BF7418600E9354C /* HeroModel.h */,
@@ -4137,6 +4150,7 @@
 				AD360C901BF0BD5C0010FBC8 /* player_detail_pre@2x.png in Resources */,
 				AD360BC81BF0BD5B0010FBC8 /* icon_money_big@2x.png in Resources */,
 				AD360D0F1BF0BD5D0010FBC8 /* smiley_61@2x.png in Resources */,
+				AD3950B61BFC5642003576FD /* HeroInfoCell.xib in Resources */,
 				AD360D8C1BF0BD5E0010FBC8 /* warn_icon@2x.png in Resources */,
 				AD360BF91BF0BD5B0010FBC8 /* locate_head_item_press@2x.png in Resources */,
 				AD360C9D1BF0BD5C0010FBC8 /* player_position_edit@2x.png in Resources */,
@@ -4378,6 +4392,7 @@
 				ADC398321BF7175A00E9354C /* MJRefreshAutoNormalFooter.m in Sources */,
 				ADA933171BF5FD1C00F4A8A5 /* MMHud.m in Sources */,
 				ADE128021BF0A34900FA2ACC /* MyTabBarController.m in Sources */,
+				AD0EC3D61BFC694B00508D6D /* HeroInfoModel.m in Sources */,
 				AD360DF01BF0DA3D0010FBC8 /* VideoViewController.m in Sources */,
 				ADC3983C1BF7175A00E9354C /* UIScrollView+MJExtension.m in Sources */,
 				AD360DFC1BF0DA890010FBC8 /* RadiersViewController.m in Sources */,
@@ -4403,6 +4418,7 @@
 				ADC3982E1BF7175A00E9354C /* MJRefreshComponent.m in Sources */,
 				ADC398361BF7175A00E9354C /* MJRefreshBackStateFooter.m in Sources */,
 				ADC3982F1BF7175A00E9354C /* MJRefreshFooter.m in Sources */,
+				AD3950B51BFC5642003576FD /* HeroInfoCell.m in Sources */,
 				ADA932EE1BF5F16900F4A8A5 /* SCPopView.m in Sources */,
 				ADE127CE1BF0987C00FA2ACC /* AppDelegate.m in Sources */,
 				ADA932F61BF5FB5D00F4A8A5 /* DesignDisplayView.m in Sources */,

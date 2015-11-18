@@ -9,6 +9,8 @@
 #import "HeroDetailViewController.h"
 #import "SkillModel.h"
 #import "HeroSkillViewCell.h"
+#import "HeroInfoCell.h"
+#import "HeroInfoModel.h"
 
 #define MAX_WIDTH [UIScreen mainScreen].bounds.size.width
 #define MAX_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -19,7 +21,8 @@
     UITableView * _heroTableView;   //父表格视图
     UIView * _headView;  //4个按钮容器
     UITableView * _currentTableView; //当前活动的子视图
-    NSMutableArray * _dataArray; //数据源
+    NSMutableArray * _dataArray; //所有数据源
+    NSMutableArray * _currentDataArray; //当前数据源
 }
 @end
 
@@ -75,10 +78,15 @@
         _skillTableView.delegate = self;
         _skillTableView.dataSource = self;
         _skillTableView.scrollEnabled = NO;
+        _skillTableView.showsVerticalScrollIndicator = NO;
+        //隐藏中间横线
+        _skillTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
         //注册cell
         [_skillTableView registerNib:[UINib nibWithNibName:@"HeroSkillViewCell" bundle:nil] forCellReuseIdentifier:@"heroReuseCell"];
         
+        //注册cell
+        [_skillTableView registerNib:[UINib nibWithNibName:@"HeroInfoCell" bundle:nil] forCellReuseIdentifier:@"heroInfoReuseCell"];
         
         if (!i) { //第0个
             //当前表格视图
@@ -103,7 +111,7 @@
     
     //中间4个按钮
     _headView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, 50)];
-    NSArray * titleArray = @[@"技能",@"出装加点",@"故事",@"攻略"];
+    NSArray * titleArray = @[@"技能",@"出装加点",@"故事",@"天赋"];
     [titleArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
         btn.frame = CGRectMake(MAX_WIDTH / 4 * idx, 0, MAX_WIDTH / 4, 50);
@@ -141,22 +149,68 @@
             NSString * heroImageStrUrl = resultDic[@"img_top"];
             //顶部图片
             [_heroBigImageView setImageWithURL:[NSURL URLWithString:heroImageStrUrl] placeholderImage:[UIImage imageNamed:@"bindLogo"]];
+            
+//=================================================第一页数据开始===============================================/
             //解析技能
             NSArray * skillArray = resultDic[@"skill"];
-            NSMutableArray * skillDataArray = [@[] mutableCopy];
+            //技能相关模型数组
+            NSMutableArray * skillModelArray = [@[] mutableCopy];
             for (NSDictionary * dic in skillArray) {
                 SkillModel * model = [[SkillModel alloc] init];
                 [model setValuesForKeysWithDictionary:dic];
-                [skillDataArray addObject:model];
+                [skillModelArray addObject:model];
             }
             
-            if (!_dataArray) {
+            //多重数组。提高可扩展性
+            NSArray * heroTitleArray = @[@[@"操作技巧"],@[@"符文穿戴"],@[@"背景故事"],@[@"天赋"]];
+            NSArray * dataKeys = @[@[@"analyse"],@[@"rune_desc"],@[@"background"],@[@"talent_desc"]];
+            for (int i = 0; i < heroTitleArray.count; i++) {
+                //当前页容器
+                NSMutableArray * currentDataArray = [@[] mutableCopy];
+                if (i == 0) {
+                    //技能数据加入到第一组中
+                    [currentDataArray addObject:skillModelArray];
+                }
+                [heroTitleArray[i] enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                    HeroInfoModel * infoModel = [[HeroInfoModel alloc] init];
+                    infoModel.title = obj;
+                    infoModel.desc = resultDic[dataKeys[i][idx]];
+                    [currentDataArray addObject:infoModel];
+                }];
                 
-                _dataArray = [@[] mutableCopy];
+                if (!_dataArray) {
+                    
+                    _dataArray = [@[] mutableCopy];
+                }
+                
+                [_dataArray addObject:currentDataArray];//存入数据源
             }
+            //操作技巧解析
+           
             
-            [_dataArray addObject:skillDataArray];//存入数据源
+//=================================================第一页数据结束===============================================/
             
+//=================================================第二页数据开始===============================================/
+//            //第二页数据容器
+//            NSMutableArray * equipArray = [@[] mutableCopy];
+//            
+//            //符文穿戴
+//            HeroInfoModel * traceModel = [[HeroInfoModel alloc] init];
+//            traceModel.title = ;
+//            traceModel.desc = resultDic[];
+//            [equipArray addObject:traceModel];
+//            [_dataArray addObject:equipArray];
+//=================================================第二页数据结束===============================================/
+//=================================================第三页数据开始===============================================/
+            //第三页数据容器
+            NSMutableArray * storyArray = [@[] mutableCopy];
+            //背景故事
+            
+//=================================================第三页数据结束===============================================/
+//=================================================第四页数据开始===============================================/
+//=================================================第四页数据结束===============================================/
+            //默认显示第一页数据
+            _currentDataArray = _dataArray[0];
             //刷新数据
             [_currentTableView reloadData];
         }
@@ -196,7 +250,7 @@
     if (tableView == _heroTableView) {
         return 1;
     }
-    return 12;
+    return _currentDataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -210,26 +264,37 @@
         [cell.contentView addSubview:_scrollview];
         return cell;
     }
-    if (indexPath.row) {
-        static NSString * cellIdentifier = @"cellIdentifier";
-        UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    //子视图刷新
+    if (tableView == _currentTableView) {
+        id obj= _currentDataArray[indexPath.row];
+        
+        //数组类型。说明为技能相关表格
+        if ([obj isKindOfClass:[NSArray class]]) {
+            NSArray * skillArray = (NSArray *)obj;
+            static NSString * cellIdentifier = @"heroReuseCell";
+            HeroSkillViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            //设置代理
+            cell.delegate = self;
+            
+            cell.dataArray = skillArray; //相关数据
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone; //不可点击
+            
+            return cell;
         }
-        cell.detailTextLabel.text = @"呵呵";
-        return cell;
+        
+        //通用相关信息
+        else if([obj isKindOfClass:[HeroInfoModel class]]){
+            HeroInfoModel * model = (HeroInfoModel *)obj;
+            static NSString * cellIdentifier = @"heroInfoReuseCell";
+            HeroInfoCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            cell.title.text = model.title;
+            cell.desc.text = model.desc;
+            return cell;
+        }
     }
-    //skill tableview
-    static NSString * cellIdentifier = @"heroReuseCell";
-    HeroSkillViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    //设置代理
-    cell.delegate = self;
-    
-    cell.dataArray = [_dataArray firstObject]; //相关数据
-    
-    cell.selectionStyle = UITableViewCellSelectionStyleNone; //不可点击
-    return cell;
-    
+
+    return nil;
 }
 
 
@@ -239,10 +304,29 @@
         return MAX_HEIGHT - 64 - 50 + 200;
     }
     
-    static NSString * cellIdentifier = @"heroReuseCell";
-    HeroSkillViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    cell.dataArray = [_dataArray firstObject]; //相关数据
-    return [cell heightOfCellWithWidth:MAX_WIDTH];
+    
+    UITableViewCell * cell;
+    id obj= _currentDataArray[indexPath.row];
+    //数组类型。说明为技能相关表格
+    if ([obj isKindOfClass:[NSArray class]]) {
+        //子视图
+        static NSString * cellIdentifier = @"heroReuseCell";
+        cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        [(id)cell setDataArray:obj]; //相关数据
+    }
+    
+    //通用相关信息
+    else if([obj isKindOfClass:[HeroInfoModel class]]){
+        HeroInfoModel * model = (HeroInfoModel *)obj;
+        static NSString * cellIdentifier = @"heroInfoReuseCell";
+        HeroInfoCell * infoCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        infoCell.title.text = model.title;
+        infoCell.desc.text = model.desc;
+        
+        cell = infoCell;
+    }
+
+    return [(id)cell heightOfCellWithWidth:MAX_WIDTH];
 }
 
 
@@ -345,8 +429,19 @@
                 [b.titleLabel setFont:[UIFont systemFontOfSize:18]];
                 //当前表格视图
                 _currentTableView = [[_scrollview.subviews[idx] subviews]firstObject];
-                //刷新表格
-                [_currentTableView reloadData];
+                //当前数据源赋值
+//                if (_currentDataArray) {
+//                    //清空数据
+//                    [_currentDataArray removeAllObjects];
+//                }
+                if (_dataArray.count > idx) {
+                    _currentDataArray = _dataArray[idx];
+                    //刷新表格
+                    [_currentTableView reloadData];
+                }
+                
+                
+
             }
         }
     }];
@@ -379,8 +474,14 @@
     
     //当前表格视图
    _currentTableView = [[_scrollview.subviews[btn.tag - 100] subviews]firstObject];
-    //刷新表格
-    [_currentTableView reloadData];
+    
+    //当前数据源赋值
+    if (_dataArray.count > btn.tag - 100) {
+        _currentDataArray = _dataArray[btn.tag - 100];
+        //刷新表格
+        [_currentTableView reloadData];
+    }
+
     
 }
 
@@ -390,7 +491,7 @@
     if ([cell isKindOfClass:[HeroSkillViewCell class]]) {
         NSInteger currentPicIndex = [(HeroSkillViewCell *)cell currentPic];
         //保存到模型中
-        [(SkillModel *)[[_dataArray firstObject] lastObject] setCurrentSelectedPicIndex:currentPicIndex];
+        [(SkillModel *)[[_currentDataArray firstObject] lastObject] setCurrentSelectedPicIndex:currentPicIndex];
     }
     //刷新数据
     [_currentTableView reloadRowsAtIndexPaths:@[[_currentTableView indexPathForCell:cell]] withRowAnimation:NO];

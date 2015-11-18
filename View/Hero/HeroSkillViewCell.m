@@ -39,6 +39,9 @@
         self.skillDesc.text = model.desc;
         
         //保存当前点击图片
+        if (self.currentPic == gesture.view.tag - 10) {
+            return;
+        }
         self.currentPic = gesture.view.tag - 10;
         
         if ([self.delegate respondsToSelector:@selector(reloadCellByCell:)]) {
