@@ -7,6 +7,7 @@
 //
 
 #import "InfoDetialViewController.h"
+#import "UMSocial.h"
 
 @interface InfoDetialViewController ()
 @property (strong, nonatomic) UIWebView * webView;
@@ -23,6 +24,8 @@
 - (void)setLayout {
     self.navigationController.navigationBar.hidden = NO;
     self.title = @"资讯详情";
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"分享" style:UIBarButtonItemStylePlain target:self action:@selector(shareBtnClick)];
     
     self.webView = [[UIWebView alloc] initWithFrame:self.view.bounds];
     [self.view addSubview:self.webView];
@@ -50,6 +53,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+
+
+//分享按钮点击
+- (void)shareBtnClick {
+    [UMSocialSnsService presentSnsIconSheetView:self
+                                         appKey:SHARE_KEY
+                                      shareText:@"来自吊炸天的LOLBoxAPP分享"
+                                     shareImage:[UIImage imageNamed:@"icon.png"]
+                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToQzone,nil]
+                                       delegate:nil];
+}
 /*
 #pragma mark - Navigation
 

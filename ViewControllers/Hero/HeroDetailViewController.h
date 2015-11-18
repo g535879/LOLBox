@@ -9,6 +9,6 @@
 #import "RootViewController.h"
 
 @interface HeroDetailViewController : RootViewController
-@property (copy, nonatomic) NSString * heroId;
-@property (copy, nonatomic) NSString * heroName;
+@property (copy, nonatomic) NSString * heroId;   //英雄id
+@property (copy, nonatomic) NSString * heroName;  //英雄名
 @end

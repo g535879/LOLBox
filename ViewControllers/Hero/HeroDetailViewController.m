@@ -2,23 +2,24 @@
 //  HeroDetailViewController.m
 //  LOLBox
 //
-//  Created by 古玉彬 on 15/11/14.
+//  Created by 古玉彬 on 15/11/14./Users/guyubin/Documents/developer/Project/LOLBox/LOLBox.xcodeproj
 //  Copyright © 2015年 guyubin. All rights reserved.
 //
 
 #import "HeroDetailViewController.h"
+#import "SkillModel.h"
+#import "HeroSkillViewCell.h"
 
 #define MAX_WIDTH [UIScreen mainScreen].bounds.size.width
 #define MAX_HEIGHT [UIScreen mainScreen].bounds.size.height
 
-@interface HeroDetailViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate> {
+@interface HeroDetailViewController ()<UIScrollViewDelegate,UITableViewDataSource,UITableViewDelegate,ReloadCell> {
     UIScrollView * _scrollview; //滚动视图
     UIImageView * _heroBigImageView; //英雄图片
     UITableView * _heroTableView;   //父表格视图
     UIView * _headView;  //4个按钮容器
     UITableView * _currentTableView; //当前活动的子视图
-
-    
+    NSMutableArray * _dataArray; //数据源
 }
 @end
 
@@ -75,6 +76,10 @@
         _skillTableView.dataSource = self;
         _skillTableView.scrollEnabled = NO;
         
+        //注册cell
+        [_skillTableView registerNib:[UINib nibWithNibName:@"HeroSkillViewCell" bundle:nil] forCellReuseIdentifier:@"heroReuseCell"];
+        
+        
         if (!i) { //第0个
             //当前表格视图
             _currentTableView = _skillTableView;
@@ -117,6 +122,7 @@
     
     [_headView setBackgroundColor:[UIColor lightGrayColor]];
     _heroTableView.tableHeaderView  = _headView;
+    
 
 }
 
@@ -133,7 +139,26 @@
         if (![error_code integerValue]) {
             NSDictionary * resultDic = jsonObj[@"result"];
             NSString * heroImageStrUrl = resultDic[@"img_top"];
+            //顶部图片
             [_heroBigImageView setImageWithURL:[NSURL URLWithString:heroImageStrUrl] placeholderImage:[UIImage imageNamed:@"bindLogo"]];
+            //解析技能
+            NSArray * skillArray = resultDic[@"skill"];
+            NSMutableArray * skillDataArray = [@[] mutableCopy];
+            for (NSDictionary * dic in skillArray) {
+                SkillModel * model = [[SkillModel alloc] init];
+                [model setValuesForKeysWithDictionary:dic];
+                [skillDataArray addObject:model];
+            }
+            
+            if (!_dataArray) {
+                
+                _dataArray = [@[] mutableCopy];
+            }
+            
+            [_dataArray addObject:skillDataArray];//存入数据源
+            
+            //刷新数据
+            [_currentTableView reloadData];
         }
         [MMProgressHUD dismissWithSuccess:@"加载完成"];
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
@@ -185,13 +210,24 @@
         [cell.contentView addSubview:_scrollview];
         return cell;
     }
-    
-    static NSString * cellIdentifier = @"cellIdentifier";
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    if (indexPath.row) {
+        static NSString * cellIdentifier = @"cellIdentifier";
+        UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        }
+        cell.detailTextLabel.text = @"呵呵";
+        return cell;
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"测试数据%ld",indexPath.row];
+    //skill tableview
+    static NSString * cellIdentifier = @"heroReuseCell";
+    HeroSkillViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    //设置代理
+    cell.delegate = self;
+    
+    cell.dataArray = [_dataArray firstObject]; //相关数据
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone; //不可点击
     return cell;
     
 }
@@ -202,7 +238,11 @@
     if (tableView == _heroTableView) {
         return MAX_HEIGHT - 64 - 50 + 200;
     }
-    return 240;
+    
+    static NSString * cellIdentifier = @"heroReuseCell";
+    HeroSkillViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    cell.dataArray = [_dataArray firstObject]; //相关数据
+    return [cell heightOfCellWithWidth:MAX_WIDTH];
 }
 
 
@@ -302,16 +342,17 @@
             }
             if (idx == scrollView.contentOffset.x / MAX_WIDTH) {
                 b.selected = YES;
-                
+                [b.titleLabel setFont:[UIFont systemFontOfSize:18]];
                 //当前表格视图
                 _currentTableView = [[_scrollview.subviews[idx] subviews]firstObject];
-                
-                [b.titleLabel setFont:[UIFont systemFontOfSize:18]];
+                //刷新表格
+                [_currentTableView reloadData];
             }
         }
     }];
     
 }
+
 #pragma mark - titleBtnClick 
 - (void)titleBtnClick:(UIButton *)btn {
     //取消其他按钮选中状态
@@ -327,15 +368,31 @@
     btn.selected = !btn.selected;
     
     [UIView animateWithDuration:0.5f animations:^{
-        //设置滚动视图偏移量
-        _scrollview.contentOffset = CGPointMake(MAX_WIDTH * (btn.tag - 100), 0);
         //字体变大
         [btn.titleLabel setFont:[UIFont systemFontOfSize:18]];
+        
+        //设置滚动视图偏移量
+        _scrollview.contentOffset = CGPointMake(MAX_WIDTH * (btn.tag - 100), 0);
+
+       
     }];
     
     //当前表格视图
    _currentTableView = [[_scrollview.subviews[btn.tag - 100] subviews]firstObject];
+    //刷新表格
+    [_currentTableView reloadData];
     
 }
 
+#pragma mark -  reloadCell delegate
+- (void)reloadCellByCell:(UITableViewCell *)cell {
+    //保存当前选中图片下标
+    if ([cell isKindOfClass:[HeroSkillViewCell class]]) {
+        NSInteger currentPicIndex = [(HeroSkillViewCell *)cell currentPic];
+        //保存到模型中
+        [(SkillModel *)[[_dataArray firstObject] lastObject] setCurrentSelectedPicIndex:currentPicIndex];
+    }
+    //刷新数据
+    [_currentTableView reloadRowsAtIndexPaths:@[[_currentTableView indexPathForCell:cell]] withRowAnimation:NO];
+}
 @end
