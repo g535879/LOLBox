@@ -4,7 +4,7 @@
 //
 //  Created by 古玉彬 on 15/11/18.
 //  Copyright © 2015年 guyubin. All rights reserved.
-//
+// 
 
 #import <UIKit/UIKit.h>
 
@@ -26,7 +26,14 @@
 
 @property (assign, nonatomic) id<PushHeroPage> delegate;
 
-- (void)setModel:(HeroDetailCellModel *)model;
+//设置模型
+- (void)setModel:(id)idModel;
+
+//布局
+- (void)createLayout;
+
+//设置控件位置
+- (void)setPositon;
 
 //单元格高度
 - (CGFloat)heightOfCellWithWidth:(CGFloat)width;

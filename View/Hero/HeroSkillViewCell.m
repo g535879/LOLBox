@@ -81,12 +81,23 @@
     if (!dataArray.count) {
         return;
     }
+    //判断R技能是否放在了第一个位置。
+    SkillModel * firstModel = [dataArray firstObject];
+    if ([firstModel.key isEqualToString:@"Q"]) {
+        
+        //交换第一个和最后一个数据(默认R技能放在在后。但需要在最前面显示)
+        NSMutableArray * tempArray = [dataArray mutableCopy];
+        [tempArray insertObject:tempArray.lastObject atIndex:0];
+        [tempArray removeObjectAtIndex:tempArray.count - 1];
+        _dataArray = tempArray;
+    }else{
+        
+        //不交换。需要把当前点击的图片index保存到第一个model中。因为赋值在最后一个model中
+        firstModel.currentSelectedPicIndex = [[dataArray lastObject] currentSelectedPicIndex];
+        _dataArray = dataArray;
+    }
     
-    //交换第一个和最后一个数据(默认技能放在在后。但需要在最前面显示)
-    NSMutableArray * tempArray = [dataArray mutableCopy];
-    [tempArray insertObject:tempArray.lastObject atIndex:0];
-    [tempArray removeObjectAtIndex:tempArray.count - 1];
-    _dataArray = tempArray;
+   
     
     //赋值数据
     for (int i = 0; i < self.dataArray.count; i++) {

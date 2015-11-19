@@ -829,6 +829,8 @@
 		AD6B52471BFB2C6200061F6C /* libUMSocial_Sdk_Shake_1.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B52291BFB2C6200061F6C /* libUMSocial_Sdk_Shake_1.0.a */; settings = {ASSET_TAGS = (); }; };
 		AD6B52481BFB2C6200061F6C /* libSocialWechat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B522C1BFB2C6200061F6C /* libSocialWechat.a */; settings = {ASSET_TAGS = (); }; };
 		AD6B52491BFB2C6200061F6C /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AD6B522D1BFB2C6200061F6C /* libWeChatSDK.a */; settings = {ASSET_TAGS = (); }; };
+		AD83F3651BFD4FDF006BF27F /* SummonerSkillCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD83F3641BFD4FDF006BF27F /* SummonerSkillCell.m */; settings = {ASSET_TAGS = (); }; };
+		AD83F3701BFD6F8D006BF27F /* SummonerSkillModel.m in Sources */ = {isa = PBXBuildFile; fileRef = AD83F36F1BFD6F8D006BF27F /* SummonerSkillModel.m */; settings = {ASSET_TAGS = (); }; };
 		AD988C871BFCBBBD00B1727F /* HeroPorAViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AD988C861BFCBBBD00B1727F /* HeroPorAViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		ADA8E0EF1BFB468300DD5EA5 /* HeroSkillViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA8E0ED1BFB468300DD5EA5 /* HeroSkillViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		ADA8E0F01BFB468300DD5EA5 /* HeroSkillViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADA8E0EE1BFB468300DD5EA5 /* HeroSkillViewCell.xib */; settings = {ASSET_TAGS = (); }; };
@@ -853,6 +855,7 @@
 		ADA933201BF5FD1C00F4A8A5 /* MMVectorImage.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA933141BF5FD1C00F4A8A5 /* MMVectorImage.m */; settings = {ASSET_TAGS = (); }; };
 		ADA933231BF60AA800F4A8A5 /* NewsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA933221BF60AA800F4A8A5 /* NewsModel.m */; settings = {ASSET_TAGS = (); }; };
 		ADA933271BF6154000F4A8A5 /* NSString+URLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = ADA933261BF6154000F4A8A5 /* NSString+URLEncoding.m */; settings = {ASSET_TAGS = (); }; };
+		ADAE0C041BFD7FFF006D9292 /* SummonerCellModel.m in Sources */ = {isa = PBXBuildFile; fileRef = ADAE0C031BFD7FFF006D9292 /* SummonerCellModel.m */; settings = {ASSET_TAGS = (); }; };
 		ADC397B71BF6D54800E9354C /* InfoDetialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC397B61BF6D54800E9354C /* InfoDetialViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ADC397BB1BF6DD2300E9354C /* NewsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ADC397B91BF6DD2300E9354C /* NewsViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		ADC397BC1BF6DD2300E9354C /* NewsViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = ADC397BA1BF6DD2300E9354C /* NewsViewCell.xib */; settings = {ASSET_TAGS = (); }; };
@@ -1792,6 +1795,10 @@
 		AD6B522E1BFB2C6200061F6C /* UMSocialWechatHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMSocialWechatHandler.h; sourceTree = "<group>"; };
 		AD6B522F1BFB2C6200061F6C /* WXApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApi.h; sourceTree = "<group>"; };
 		AD6B52301BFB2C6200061F6C /* WXApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXApiObject.h; sourceTree = "<group>"; };
+		AD83F3631BFD4FDF006BF27F /* SummonerSkillCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummonerSkillCell.h; sourceTree = "<group>"; };
+		AD83F3641BFD4FDF006BF27F /* SummonerSkillCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummonerSkillCell.m; sourceTree = "<group>"; };
+		AD83F36E1BFD6F8D006BF27F /* SummonerSkillModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummonerSkillModel.h; sourceTree = "<group>"; };
+		AD83F36F1BFD6F8D006BF27F /* SummonerSkillModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummonerSkillModel.m; sourceTree = "<group>"; };
 		AD988C851BFCBBBD00B1727F /* HeroPorAViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroPorAViewCell.h; sourceTree = "<group>"; };
 		AD988C861BFCBBBD00B1727F /* HeroPorAViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HeroPorAViewCell.m; sourceTree = "<group>"; };
 		ADA8E0EC1BFB468300DD5EA5 /* HeroSkillViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HeroSkillViewCell.h; sourceTree = "<group>"; };
@@ -1839,6 +1846,8 @@
 		ADA933221BF60AA800F4A8A5 /* NewsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewsModel.m; path = Model/NewsModel.m; sourceTree = SOURCE_ROOT; };
 		ADA933251BF6154000F4A8A5 /* NSString+URLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+URLEncoding.h"; sourceTree = "<group>"; };
 		ADA933261BF6154000F4A8A5 /* NSString+URLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+URLEncoding.m"; sourceTree = "<group>"; };
+		ADAE0C021BFD7FFF006D9292 /* SummonerCellModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SummonerCellModel.h; sourceTree = "<group>"; };
+		ADAE0C031BFD7FFF006D9292 /* SummonerCellModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SummonerCellModel.m; sourceTree = "<group>"; };
 		ADC397B51BF6D54800E9354C /* InfoDetialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoDetialViewController.h; sourceTree = "<group>"; };
 		ADC397B61BF6D54800E9354C /* InfoDetialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoDetialViewController.m; sourceTree = "<group>"; };
 		ADC397B81BF6DD2300E9354C /* NewsViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewsViewCell.h; path = View/NewsViewCell.h; sourceTree = SOURCE_ROOT; };
@@ -2891,6 +2900,8 @@
 				AD3950B41BFC5642003576FD /* HeroInfoCell.xib */,
 				AD988C851BFCBBBD00B1727F /* HeroPorAViewCell.h */,
 				AD988C861BFCBBBD00B1727F /* HeroPorAViewCell.m */,
+				AD83F3631BFD4FDF006BF27F /* SummonerSkillCell.h */,
+				AD83F3641BFD4FDF006BF27F /* SummonerSkillCell.m */,
 				ADA8E0EC1BFB468300DD5EA5 /* HeroSkillViewCell.h */,
 				ADA8E0ED1BFB468300DD5EA5 /* HeroSkillViewCell.m */,
 				ADA8E0EE1BFB468300DD5EA5 /* HeroSkillViewCell.xib */,
@@ -2929,6 +2940,8 @@
 		AD6B51731BFAF5D500061F6C /* Hero */ = {
 			isa = PBXGroup;
 			children = (
+				AD83F36E1BFD6F8D006BF27F /* SummonerSkillModel.h */,
+				AD83F36F1BFD6F8D006BF27F /* SummonerSkillModel.m */,
 				AD0EC3D41BFC694B00508D6D /* HeroInfoModel.h */,
 				AD0EC3D51BFC694B00508D6D /* HeroInfoModel.m */,
 				AD6B516B1BFAF53400061F6C /* SkillModel.h */,
@@ -2939,6 +2952,8 @@
 				AD0EC4041BFC8DB300508D6D /* HeroDetailModel.m */,
 				AD0EC4061BFCA69A00508D6D /* HeroDetailCellModel.h */,
 				AD0EC4071BFCA69A00508D6D /* HeroDetailCellModel.m */,
+				ADAE0C021BFD7FFF006D9292 /* SummonerCellModel.h */,
+				ADAE0C031BFD7FFF006D9292 /* SummonerCellModel.m */,
 			);
 			path = Hero;
 			sourceTree = "<group>";
@@ -4406,6 +4421,7 @@
 				ADA932FA1BF5FB8100F4A8A5 /* ScroModel.m in Sources */,
 				ADC398321BF7175A00E9354C /* MJRefreshAutoNormalFooter.m in Sources */,
 				ADA933171BF5FD1C00F4A8A5 /* MMHud.m in Sources */,
+				AD83F3701BFD6F8D006BF27F /* SummonerSkillModel.m in Sources */,
 				ADE128021BF0A34900FA2ACC /* MyTabBarController.m in Sources */,
 				AD0EC3D61BFC694B00508D6D /* HeroInfoModel.m in Sources */,
 				AD360DF01BF0DA3D0010FBC8 /* VideoViewController.m in Sources */,
@@ -4426,6 +4442,7 @@
 				ADA9331E1BF5FD1C00F4A8A5 /* MMProgressHUDWindow.m in Sources */,
 				ADC3983E1BF7175A00E9354C /* UIView+MJExtension.m in Sources */,
 				ADC3983B1BF7175A00E9354C /* MJRefreshConst.m in Sources */,
+				AD83F3651BFD4FDF006BF27F /* SummonerSkillCell.m in Sources */,
 				ADC397BB1BF6DD2300E9354C /* NewsViewCell.m in Sources */,
 				ADC398341BF7175A00E9354C /* MJRefreshBackGifFooter.m in Sources */,
 				ADC3982C1BF7175A00E9354C /* MJRefreshAutoFooter.m in Sources */,
@@ -4443,6 +4460,7 @@
 				ADC398381BF7175A00E9354C /* MJRefreshNormalHeader.m in Sources */,
 				ADC398331BF7175A00E9354C /* MJRefreshAutoStateFooter.m in Sources */,
 				ADC398611BF76D9B00E9354C /* HeroDetailViewController.m in Sources */,
+				ADAE0C041BFD7FFF006D9292 /* SummonerCellModel.m in Sources */,
 				ADC398531BF72F9B00E9354C /* PinyinFormatter.m in Sources */,
 				ADC398311BF7175A00E9354C /* MJRefreshAutoGifFooter.m in Sources */,
 				ADC3982D1BF7175A00E9354C /* MJRefreshBackFooter.m in Sources */,

@@ -24,14 +24,21 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self createLayout];
+        
+        //添加手势
+        [self.firstImg addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imgTouch:)]];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        //添加手势
+        [self.secImg addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imgTouch:)]];
     }
     return self;
 }
 
-- (void)setModel:(HeroDetailCellModel *)model {
+- (void)setModel:(id)idModel {
     
-    self.myModel = model;
+    self.myModel = idModel;
+    HeroDetailCellModel * model = idModel;
     
     [self.firstImg setImageWithURL:[NSURL URLWithString:model.firstHeroImg]];
     [self.secImg setImageWithURL:[NSURL URLWithString:model.secondHeroImg]];
@@ -50,15 +57,12 @@
     
     self.title = [[UILabel alloc] initWithFrame:CGRectMake(25, 5, 200, 21)];
     [self.title setFont:[UIFont systemFontOfSize:17]];
-    
     [self.contentView addSubview:self.title];
     
     
     self.firstImg = [[UIImageView alloc] init];
     self.firstImg.frame = CGRectMake(25, 31, 40, 40);
     self.firstImg.userInteractionEnabled = YES;
-    //添加手势
-    [self.firstImg addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imgTouch:)]];
     [self.contentView addSubview:self.firstImg];
     
     self.firstDesc = [[UILabel alloc] init];
@@ -68,8 +72,6 @@
     
     self.secImg = [[UIImageView alloc] init];
     self.secImg.userInteractionEnabled = YES;
-    //添加手势
-    [self.secImg addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imgTouch:)]];
     [self.contentView addSubview:self.secImg];
     
     
@@ -89,22 +91,30 @@
     CGRect firstDexc = CGRectMake(CGRectGetMaxX(firstImgFrame)+ 5, firstImgFrame.origin.y, width,[self sizeofLabel:width WithText:self.firstDesc.text andFont:self.firstDesc.font]);
         self.firstDesc.frame = firstDexc;
     
-    
-    CGRect secondImgFrame = CGRectMake(firstImgFrame.origin.x, CGRectGetMaxY(firstDexc)+10, firstImgFrame.size.width, firstImgFrame.size.height);
+    CGRect maxFirstRect = [self maxHeight:firstDexc andRect:firstImgFrame];
+
+
+    CGRect secondImgFrame = CGRectMake(firstImgFrame.origin.x, CGRectGetMaxY(maxFirstRect)+10, firstImgFrame.size.width, firstImgFrame.size.height);
     
     self.secImg.frame = secondImgFrame;
     
-    CGRect secondDescFrame = CGRectMake(firstDexc.origin.x, CGRectGetMaxY(firstDexc)+10, width, [self sizeofLabel:width WithText:self.secDesc.text andFont:self.secDesc.font]);
+    CGRect secondDescFrame = CGRectMake(firstDexc.origin.x, CGRectGetMaxY(maxFirstRect)+10, width, [self sizeofLabel:width WithText:self.secDesc.text andFont:self.secDesc.font]);
     
     self.secDesc.frame = secondDescFrame;
 }
 
+- (CGRect)maxHeight:(CGRect)rect1 andRect:(CGRect)rect2 {
+    
 
+   return CGRectGetMaxY(rect1) > CGRectGetMaxY(rect2) ? rect1 : rect2;
+}
+
+//确定单元格高度
 - (CGFloat)heightOfCellWithWidth:(CGFloat)width {
     
    
     
-    return CGRectGetMaxY(self.secDesc.frame) +20;
+    return CGRectGetMaxY([self maxHeight:self.secDesc.frame andRect:self.secImg.frame]) + 10;
 }
 
 //手势点击
@@ -134,6 +144,7 @@
     
     return size.height;
 }
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

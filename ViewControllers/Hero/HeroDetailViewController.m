@@ -14,6 +14,9 @@
 #import "HeroDetailModel.h"
 #import "HeroDetailCellModel.h"
 #import "HeroPorAViewCell.h"
+#import "SummonerSkillModel.h"
+#import "SummonerSkillCell.h"
+#import "SummonerCellModel.h"
 
 #define MAX_WIDTH [UIScreen mainScreen].bounds.size.width
 #define MAX_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -62,6 +65,9 @@
 #pragma mark - createLayout 
 - (void)createLayout {
     
+    //导航栏返回按钮
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"back_nor"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]style:UIBarButtonItemStylePlain target:self action:@selector(backBtnClick)];
+    
     
     //scrollView
     _scrollview = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, MAX_WIDTH, MAX_HEIGHT - 64 - 50)];
@@ -88,15 +94,17 @@
         //隐藏中间横线
         _skillTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         
-        //注册cell
+        //注册英雄技能cell
         [_skillTableView registerNib:[UINib nibWithNibName:@"HeroSkillViewCell" bundle:nil] forCellReuseIdentifier:@"heroReuseCell"];
         
-        //注册cell
+        //注册英雄相关描述cell
         [_skillTableView registerNib:[UINib nibWithNibName:@"HeroInfoCell" bundle:nil] forCellReuseIdentifier:@"heroInfoReuseCell"];
         
-        //注册cell
+        //注册搭档or敌对cell
         [_skillTableView registerClass:[HeroPorAViewCell class] forCellReuseIdentifier:@"heroPaterOrAgainstReuseCell"];
         
+        //注册召唤师技能cell
+        [_skillTableView registerClass:[SummonerSkillCell class] forCellReuseIdentifier:@"summonerReuseCell"];
         if (!i) { //第0个
             //当前表格视图
             _currentTableView = _skillTableView;
@@ -160,8 +168,8 @@
             [_heroBigImageView setImageWithURL:[NSURL URLWithString:heroImageStrUrl] placeholderImage:[UIImage imageNamed:@"bindLogo"]];
             
             //多重数组。提高可扩展性
-            NSArray * heroTitleArray = @[@[@"技能介绍",@"操作技巧"],@[@"符文穿戴"],@[@"最佳拍档",@"最强对手",@"背景故事"],@[@"天赋"]];
-            NSArray * dataKeys = @[@[@"skill",@"analyse"],@[@"rune_desc"],@[@"hero_team",@"hero_team",@"background"],@[@"talent_desc"]];
+            NSArray * heroTitleArray = @[@[@"技能介绍",@"操作技巧"],@[@"召唤师技能",@"符文穿戴"],@[@"最佳拍档",@"最强对手",@"背景故事"],@[@"天赋"]];
+            NSArray * dataKeys = @[@[@"skill",@"analyse"],@[@"spell_recomm",@"rune_desc"],@[@"hero_team",@"hero_team",@"background"],@[@"talent_desc"]];
             for (int i = 0; i < heroTitleArray.count; i++) {
                 
                 //当前页容器
@@ -189,6 +197,8 @@
                                 [model setValuesForKeysWithDictionary:dic];
                                 [referArray addObject:model];
                             }
+                            //保存到数据源中
+                            [currentDataArray addObject:referArray];
 
                         }
                         else if ([currentKey isEqualToString:@"hero_team"]){ //英雄搭档/对手数组
@@ -200,10 +210,25 @@
                                 [model setValuesForKeysWithDictionary:dic];
                                 [referArray addObject:model];
                             }
+                            //保存到数据源中
+                            [currentDataArray addObject:referArray];
                         }
-                        
-                        //保存到数据源中
-                        [currentDataArray addObject:referArray];
+                        //召唤师技能
+                        else if ([currentKey isEqualToString:@"spell_recomm"]){
+                            NSArray * arr = objs;
+                            for (NSDictionary * dic in arr) {
+                                SummonerSkillModel * model = [[SummonerSkillModel alloc] init];
+                                [model setValuesForKeysWithDictionary:dic];
+                                [referArray addObject:model];
+                            }
+                            if (referArray.count) {
+                                
+                                SummonerCellModel * cellModel = [[SummonerCellModel alloc] initWithArray:referArray AndTitle:heroTitleArray[i][idx]];
+                                //保存到数据源中
+                                [currentDataArray addObject:cellModel];
+                            }
+                            
+                        }
                     }
                     
                     else if ([objs isKindOfClass:[NSDictionary class]]) { //数据字典
@@ -338,6 +363,15 @@
             [cell setModel:model];
             return cell;
         }
+        
+        //召唤师技能cell
+        else if ([obj isKindOfClass:[SummonerCellModel class]]) {
+            static NSString * cellIdentifier = @"summonerReuseCell";
+            SummonerSkillCell * cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+            SummonerCellModel * model = obj;
+            [cell setModel:model];
+            return cell;
+        }
     }
 
     return nil;
@@ -368,7 +402,6 @@
         HeroInfoCell * infoCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
         infoCell.title.text = model.title;
         infoCell.desc.text = model.desc;
-        
         cell = infoCell;
     }
     
@@ -382,6 +415,15 @@
         cell = heroCell;
     }
 
+    //召唤师技能介绍
+    else if ([obj isKindOfClass:[SummonerCellModel class]]){
+        static NSString * cellIdentifier = @"summonerReuseCell";
+        SummonerSkillCell * sumCell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+        SummonerCellModel * model = obj;
+        [sumCell setModel:model];
+        
+        cell = sumCell;
+    }
     return [(id)cell heightOfCellWithWidth:MAX_WIDTH];
 }
 
@@ -561,5 +603,10 @@
     hvc.heroName = title;
     
     [self.navigationController pushViewController:hvc animated:YES];
+}
+
+#pragma mark - back btn  click
+- (void)backBtnClick {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 @end
